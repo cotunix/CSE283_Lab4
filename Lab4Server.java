@@ -18,6 +18,7 @@ public class Lab4Server implements Runnable {
 	private PrintWriter out;
 	private BufferedReader in;
 	private double serverAnswer;
+	private int numAMP;
 
 	/**
 	 * Initiates new instance of the AMP server.
@@ -27,30 +28,12 @@ public class Lab4Server implements Runnable {
 	 * @throws IOException
 	 *             General IO exception.
 	 */
-	public Lab4Server(Socket sock) throws IOException {
+	public Lab4Server(Socket sock, int numAMP) throws IOException {
+		this.numAMP = numAMP;
 		clientSock = sock;
 		out = new PrintWriter(clientSock.getOutputStream(), true);
 		in = new BufferedReader(new InputStreamReader(
 				clientSock.getInputStream()));
-	}
-
-	public static void main(String args[]) throws IOException {
-
-		ServerSocket sock = new ServerSocket(PORT);
-		System.out.println("Server listening on " + InetAddress.getLocalHost()
-				+ ":" + PORT);
-		while (true) {
-			try {
-				Socket client = sock.accept();
-				(new Thread(new Lab4Server(client))).start();
-			} catch (SocketException e) {
-				e.printStackTrace();
-				System.out.println("Could not open socket. Terminating");
-				System.exit(1);
-			}
-
-		}
-
 	}
 
 	/**
@@ -174,7 +157,7 @@ public class Lab4Server implements Runnable {
 					switch (input) {
 					case ("GET WORK"): {
 						System.out.println("Client requesting AMP");
-						if (complete < 10000) {
+						if (complete < numAMP ) {
 							incComplete();
 							sendProblem();
 
@@ -224,6 +207,26 @@ public class Lab4Server implements Runnable {
 			clientSock.close();
 		} catch (IOException e) {
 			System.out.println("Error: Client socket did not close properly");
+			
+		}
+
+	}
+
+	public static void main(String args[]) throws IOException {
+		
+		
+		ServerSocket sock = new ServerSocket(PORT);
+		System.out.println("Server listening on " + InetAddress.getLocalHost()
+				+ ":" + PORT);
+		while (true) {
+			try {
+				Socket client = sock.accept();
+				(new Thread(new Lab4Server(client,Integer.parseInt(args[0])))).start();
+			} catch (SocketException e) {
+				System.out.println("Could not open socket. Terminating");
+				System.exit(1);
+			}
+
 		}
 
 	}
