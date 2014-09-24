@@ -6,7 +6,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 @SuppressWarnings("resource")
-
 /**
  * Multithreaded server for generating and sending AMP(A Math Problem) to clients.
  * @author Kyle Richardson
@@ -38,6 +37,8 @@ public class Lab4Server implements Runnable {
 	public static void main(String args[]) throws IOException {
 
 		ServerSocket sock = new ServerSocket(PORT);
+		System.out.println("Server listening on " + InetAddress.getLocalHost()
+				+ ":" + PORT);
 		while (true) {
 			try {
 				Socket client = sock.accept();
