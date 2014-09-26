@@ -157,7 +157,7 @@ public class Lab4Server implements Runnable {
 					switch (input) {
 					case ("GET WORK"): {
 						System.out.println("Client requesting AMP");
-						if (complete < numAMP ) {
+						if (complete < numAMP) {
 							incComplete();
 							sendProblem();
 
@@ -207,21 +207,21 @@ public class Lab4Server implements Runnable {
 			clientSock.close();
 		} catch (IOException e) {
 			System.out.println("Error: Client socket did not close properly");
-			
+
 		}
 
 	}
 
 	public static void main(String args[]) throws IOException {
-		
-		
+
 		ServerSocket sock = new ServerSocket(PORT);
 		System.out.println("Server listening on " + InetAddress.getLocalHost()
 				+ ":" + PORT);
 		while (true) {
 			try {
 				Socket client = sock.accept();
-				(new Thread(new Lab4Server(client,Integer.parseInt(args[0])))).start();
+				(new Thread(new Lab4Server(client, Integer.parseInt(args[0]))))
+						.start();
 			} catch (SocketException e) {
 				System.out.println("Could not open socket. Terminating");
 				System.exit(1);
